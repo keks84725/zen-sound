@@ -1,7 +1,7 @@
 <div align="center">
   <img src="assets/logo.jpg" alt="Zen Sound Logo" width="220" style="border-radius: 28px;" />
 
-  # 📻 Zen Sound
+  #   Zen Sound
 
   **Минималистичный ретро-плеер для души.**<br>
   Чистый звук, изолированные стриминговые хабы, самохостинг и раздельный офлайн-кэш без лишнего мусора и раздутого софта.
