@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zen Sound — 4 Mobile UI Concepts</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    /* Анимация вращения кассетных бобин для Концепта 2 */
+    @keyframes spinReel {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .spin-active { animation: spinReel 3s linear infinite; }
+    .spin-active-slow { animation: spinReel 5s linear infinite; }
+
+    /* Тени и границы для нео-брутализма */
+    .retro-shadow { box-shadow: 5px 5px 0px #18181b; }
+    .retro-shadow-sm { box-shadow: 2px 2px 0px #18181b; }
+    .retro-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0px #18181b !important;
+    }
+
+    /* Пиксельный шрифт для Концепта 4 */
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;800;900&display=swap');
+    .font-pixel { font-family: 'Press Start 2P', monospace; }
+    .font-mono-custom { font-family: 'Space Mono', monospace; }
+  </style>
+</head>
+<body class="bg-stone-900 text-stone-100 min-h-screen p-4 md:p-8 flex flex-col items-center select-none font-sans">
+
+  <!-- ВЕРХНЯЯ НАВИГАЦИЯ ВЫБОРА КОНЦЕПТА -->
+  <header class="w-full max-w-6xl mb-8 flex flex-col items-center text-center gap-4 border-b border-stone-800 pb-6">
+    <div class="flex items-center gap-3">
+      <span class="w-9 h-9 rounded-xl bg-orange-600 flex items-center justify-center font-black text-white text-base shadow-md">Æ</span>
+      <h1 class="text-xl md:text-2xl font-black uppercase tracking-wider text-white">Zen Sound: 4 Концепта Мобильного UI</h1>
+    </div>
+    <p class="text-xs text-stone-400 max-w-xl">
+      Выберите концепцию для детального интерактивного просмотра или переключитесь в режим «Все рядом» для визуального сравнения.
+    </p>
+
+    <!-- Переключатель 4 концепций -->
+    <div class="flex flex-wrap items-center justify-center gap-2 p-1.5 bg-stone-800/80 rounded-2xl border border-stone-700 text-xs font-bold">
+      <button onclick="showConcept(1)" id="tab-1" class="px-3.5 py-2 rounded-xl bg-orange-600 text-white shadow-sm transition-all flex items-center gap-1.5">
+        <span>📻</span> 1. Braun 80s (Нео-Брутализм)
+      </button>
+      <button onclick="showConcept(2)" id="tab-2" class="px-3.5 py-2 rounded-xl text-stone-400 hover:text-white transition-all flex items-center gap-1.5">
+        <span>📼</span> 2. Cyberdeck Cassette
+      </button>
+      <button onclick="showConcept(3)" id="tab-3" class="px-3.5 py-2 rounded-xl text-stone-400 hover:text-white transition-all flex items-center gap-1.5">
+        <span>🎛️</span> 3. Teenage Engineering
+      </button>
+      <button onclick="showConcept(4)" id="tab-4" class="px-3.5 py-2 rounded-xl text-stone-400 hover:text-white transition-all flex items-center gap-1.5">
+        <span>👾</span> 4. GameBoy Pocket
+      </button>
+      <div class="h-5 w-px bg-stone-700 hidden md:block"></div>
+      <button onclick="showAllGrid()" id="tab-all" class="px-3 py-2 rounded-xl text-stone-400 hover:text-white transition-all flex items-center gap-1">
+        <span>👁️</span> Все рядом
+      </button>
+    </div>
+  </header>
+
+  <!-- ОСНОВНАЯ ЗОНА СМЕНЫ КОНЦЕПТОВ -->
+  <main id="conceptsContainer" class="w-full max-w-6xl flex justify-center items-start gap-8 flex-wrap">
+
+    <!-- ==================================================================== -->
+    <!-- КОНЦЕПТ 1: BRAUN 80s (ТАКТИЛЬНЫЙ НЕО-БРУТАЛИЗМ ИЗ РЕФЕРЕНСА)        -->
+    <!-- ==================================================================== -->
+    <div id="card-concept-1" class="concept-view flex flex-col items-center gap-4 transition-all">
+      <div class="text-center mb-1">
+        <span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-bold uppercase tracking-wider">Концепт 1</span>
+        <h2 class="text-sm font-black text-white mt-1">Braun 80s / Dieter Rams</h2>
+        <p class="text-xs text-stone-400">Теплый беж, толстый оранжевый бампер, рельефные кнопки, жесткие тени</p>
+      </div>
+
+      <!-- Корпус телефона -->
+      <div class="w-[360px] p-3.5 rounded-[44px] bg-orange-600 border-[3.5px] border-stone-900 retro-shadow">
+        <div class="w-full bg-[#FAF5EC] text-stone-900 rounded-[34px] p-5 border-[2.5px] border-stone-900 flex flex-col gap-3 font-mono">
+          
+          <!-- Хедер -->
+          <div class="flex items-center justify-between pb-1 border-b-2 border-stone-900/10">
+            <button class="p-1 rounded hover:bg-black/5 text-xs font-black">☰ СЕРВИСЫ</button>
+            <div class="flex items-center gap-1 text-xs font-black px-2 py-0.5 rounded-full bg-amber-400 border-2 border-stone-900">
+              🟡 Яндекс
+            </div>
+            <span class="text-xs font-bold text-stone-500">98% 🔋</span>
+          </div>
+
+          <!-- Обложка в виде пластикового квадрата -->
+          <div class="w-full aspect-square rounded-2xl border-[2.5px] border-stone-900 bg-sky-200 flex flex-col items-center justify-center relative overflow-hidden shadow-inner">
+            <span class="text-6xl">📻</span>
+            <div class="absolute top-2 left-2 px-2 py-0.5 rounded bg-[#FAF5EC] border-2 border-stone-900 text-xs font-black">
+              🌊 Моя волна
+            </div>
+            <div class="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-[#FAF5EC] border-2 border-stone-900 text-xs font-black">
+              MP3 320K
+            </div>
+          </div>
+
+          <!-- Инфо о треке + кнопка кэша -->
+          <div class="flex items-center justify-between pt-1">
+            <div class="min-w-0 pr-2">
+              <h3 class="text-sm font-black truncate">Группа крови</h3>
+              <p class="text-xs text-stone-600 truncate font-semibold">КИНО — Звезда по имени Солнце</p>
+            </div>
+            <button class="px-2.5 py-1 rounded-xl bg-emerald-400 border-2 border-stone-900 retro-shadow-sm retro-btn text-xs font-black flex items-center gap-1">
+              💾 <span class="text-xs">В кэше</span>
+            </button>
+          </div>
+
+          <!-- Аналоговый ползунок -->
+          <div class="space-y-1">
+            <div class="relative w-full h-3 bg-red-300 rounded-full border-2 border-stone-900 overflow-visible flex items-center">
+              <div class="h-full bg-orange-500 rounded-l-full w-[45%]"></div>
+              <div class="w-5 h-5 rounded-full bg-orange-600 border-2 border-stone-900 absolute left-[45%] -translate-x-1/2 shadow-xs cursor-pointer"></div>
+            </div>
+            <div class="flex justify-between text-xs font-black text-stone-800">
+              <span>01:42</span>
+              <span>04:45</span>
+            </div>
+          </div>
+
+          <!-- Большие тактильные кнопки управления -->
+          <div class="flex items-center justify-between pt-2">
+            <button class="p-2 retro-btn text-stone-700">🔀</button>
+            <button class="p-2 retro-btn text-stone-900 text-lg font-black">⏮</button>
+            <button class="w-14 h-14 rounded-full bg-orange-600 border-3 border-stone-900 retro-shadow text-white flex items-center justify-center text-xl font-black retro-btn">
+              ⏸
+            </button>
+            <button class="p-2 retro-btn text-stone-900 text-lg font-black">⏭</button>
+            <button class="p-2 retro-btn text-stone-700">🔁</button>
+          </div>
+
+          <!-- Подпись -->
+          <div class="text-center pt-1 border-t border-stone-900/10">
+            <span class="text-xs font-black tracking-widest uppercase opacity-60">Zen Sound ♫ Dieter Edition</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ==================================================================== -->
+    <!-- КОНЦЕПТ 2: CYBERDECK CASSETTE (КАССЕТНЫЙ ПЛЕЕР С КРУТЯЩИМИСЯ БОБИНАМИ)-->
+    <!-- ==================================================================== -->
+    <div id="card-concept-2" class="concept-view flex flex-col items-center gap-4 transition-all">
+      <div class="text-center mb-1">
+        <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-bold uppercase tracking-wider">Концепт 2</span>
+        <h2 class="text-sm font-black text-white mt-1">Cyberdeck Cassette</h2>
+        <p class="text-xs text-stone-400">Графит, прозрачное окно с крутящейся кассетой, LED VU-метр, тумблеры</p>
+      </div>
+
+      <!-- Корпус телефона -->
+      <div class="w-[360px] p-3.5 rounded-[44px] bg-[#1E232A] border-[3.5px] border-emerald-500/40 shadow-2xl">
+        <div class="w-full bg-[#111418] text-emerald-400 rounded-[34px] p-5 border-2 border-stone-800 flex flex-col gap-3 font-mono-custom">
+          
+          <!-- Хедер с винтажным счетчиком пленки -->
+          <div class="flex items-center justify-between pb-1 border-b border-stone-800 text-xs">
+            <span class="text-stone-400 text-xs font-bold">[SRC: SUBSONIC]</span>
+            <div class="bg-black px-2 py-0.5 rounded border border-emerald-500/30 text-emerald-300 font-bold tracking-widest text-xs">
+              TAPE: 042
+            </div>
+            <span class="text-xs text-emerald-500 font-bold">● 96kHz FLAC</span>
+          </div>
+
+          <!-- КАССЕТНЫЙ БЛОК С КРУТЯЩИМИСЯ БОБИНАМИ -->
+          <div class="w-full aspect-[4/3] rounded-2xl bg-black border-2 border-stone-700 p-3 flex flex-col justify-between relative overflow-hidden shadow-inner">
+            <!-- Окошко кассеты -->
+            <div class="w-full h-full rounded-xl bg-stone-900/80 border border-stone-700 p-3 flex flex-col justify-between relative">
+              <div class="flex justify-between items-center text-xs text-stone-400 font-bold">
+                <span>SIDE A • C-90</span>
+                <span class="text-amber-400">DOLBY NR [ON]</span>
+              </div>
+              
+              <!-- Две кассетные бобины с окошком -->
+              <div class="flex items-center justify-around my-auto">
+                <!-- Левая бобина -->
+                <div class="w-14 h-14 rounded-full border-2 border-stone-600 bg-stone-800 flex items-center justify-center spin-active">
+                  <div class="w-8 h-8 rounded-full border border-stone-500 flex items-center justify-center">
+                    <div class="w-3 h-3 rounded-full bg-white"></div>
+                  </div>
+                </div>
+                <!-- Смотровое стекло уровня ленты -->
+                <div class="w-16 h-6 rounded bg-black/60 border border-stone-700 flex items-center justify-center text-xs text-stone-500 font-bold">
+                  | | | | |
+                </div>
+                <!-- Правая бобина -->
+                <div class="w-14 h-14 rounded-full border-2 border-stone-600 bg-stone-800 flex items-center justify-center spin-active-slow">
+                  <div class="w-8 h-8 rounded-full border border-stone-500 flex items-center justify-center">
+                    <div class="w-3 h-3 rounded-full bg-white"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Название на этикетке кассеты -->
+              <div class="bg-amber-100 text-stone-900 px-2 py-0.5 rounded text-xs font-bold truncate text-center">
+                M83 — Midnight City (Studio Master)
+              </div>
+            </div>
+          </div>
+
+          <!-- VU-метр (светодиодные индикаторы пиков звука) -->
+          <div class="space-y-1">
+            <div class="flex items-center gap-1.5 text-xs">
+              <span class="text-stone-400 text-xs w-4">L:</span>
+              <div class="flex-1 flex gap-0.5 h-2">
+                <div class="w-2 bg-emerald-500 rounded-xs"></div>
+                <div class="w-2 bg-emerald-500 rounded-xs"></div>
+                <div class="w-2 bg-emerald-500 rounded-xs"></div>
+                <div class="w-2 bg-emerald-500 rounded-xs"></div>
+                <div class="w-2 bg-amber-400 rounded-xs"></div>
+                <div class="w-2 bg-amber-400 rounded-xs"></div>
+                <div class="w-2 bg-rose-500 rounded-xs"></div>
+              </div>
+            </div>
+            <div class="flex items-center gap-1.5 text-xs">
+              <span class="text-stone-400 text-xs w-4">R:</span>
+              <div class="flex-1 flex gap-0.5 h-2">
+                <div class="w-2 bg-emerald-500 rounded-xs"></div>
+                <div class="w-2 bg-emerald-500 rounded-xs"></div>
+                <div class="w-2 bg-emerald-500 rounded-xs"></div>
+                <div class="w-2 bg-amber-400 rounded-xs"></div>
+                <div class="w-2 bg-amber-400 rounded-xs"></div>
+                <div class="w-2 bg-stone-800 rounded-xs"></div>
+                <div class="w-2 bg-stone-800 rounded-xs"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Механический тумблер кэша -->
+          <div class="flex items-center justify-between p-2 rounded-xl bg-stone-900 border border-stone-800 text-xs">
+            <span class="text-stone-300 font-bold">ОФЛАЙН КЭШ:</span>
+            <div class="flex items-center gap-2">
+              <span class="text-emerald-400 font-bold">АКТИВЕН</span>
+              <div class="w-10 h-5 bg-emerald-600 rounded-full p-0.5 flex justify-end">
+                <div class="w-4 h-4 bg-white rounded-full"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Клавиши кассетной деки (Прямоугольные механические клавиши) -->
+          <div class="grid grid-cols-5 gap-1.5 pt-1">
+            <button class="py-2.5 rounded-lg bg-stone-800 hover:bg-stone-700 border border-stone-700 text-xs font-bold text-center">⏮ REW</button>
+            <button class="py-2.5 rounded-lg bg-emerald-700 text-white border border-emerald-500 text-xs font-black text-center">▶ PLAY</button>
+            <button class="py-2.5 rounded-lg bg-stone-800 hover:bg-stone-700 border border-stone-700 text-xs font-bold text-center">⏸ PAUSE</button>
+            <button class="py-2.5 rounded-lg bg-rose-900 text-rose-200 border border-rose-700 text-xs font-bold text-center">⏹ STOP</button>
+            <button class="py-2.5 rounded-lg bg-stone-800 hover:bg-stone-700 border border-stone-700 text-xs font-bold text-center">⏭ F.FWD</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ==================================================================== -->
+    <!-- КОНЦЕПТ 3: TEENAGE ENGINEERING (СКАНДИНАВСКИЙ МИНИМАЛИЗМ С РУЧКАМИ)  -->
+    <!-- ==================================================================== -->
+    <div id="card-concept-3" class="concept-view flex flex-col items-center gap-4 transition-all">
+      <div class="text-center mb-1">
+        <span class="text-xs px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-400 border border-sky-500/30 font-bold uppercase tracking-wider">Концепт 3</span>
+        <h2 class="text-sm font-black text-white mt-1">Teenage Engineering (OP-1 Style)</h2>
+        <p class="text-xs text-stone-400">Матовый алюминий, 4 цветных энкодера-крутилки, векторный осциллограф</p>
+      </div>
+
+      <!-- Корпус телефона -->
+      <div class="w-[360px] p-3 rounded-[40px] bg-[#D4D4D8] border-2 border-stone-400 shadow-xl">
+        <div class="w-full bg-[#E4E4E7] text-stone-900 rounded-[32px] p-5 flex flex-col gap-3 font-sans">
+          
+          <!-- Верхний статус -->
+          <div class="flex items-center justify-between pb-1 text-xs font-bold text-stone-500 border-b border-stone-300">
+            <span>ZEN-1 // AUDIO UNIT</span>
+            <span class="text-indigo-600 font-black">SRC: SPOTIFY</span>
+            <span>BAT: 92%</span>
+          </div>
+
+          <!-- Векторный экран / Осциллограф волны -->
+          <div class="w-full aspect-[16/10] rounded-xl bg-stone-900 border border-stone-700 p-4 flex flex-col justify-between text-white relative shadow-inner">
+            <div class="flex justify-between items-center text-xs">
+              <span class="text-orange-400 font-mono font-bold">TRACK 02/14</span>
+              <span class="text-emerald-400 font-mono">320 KBPS</span>
+            </div>
+            
+            <!-- Векторный график волны звука -->
+            <div class="flex items-center justify-center gap-1 h-12 my-auto">
+              <div class="w-1 h-4 bg-orange-500 rounded-full"></div>
+              <div class="w-1 h-8 bg-orange-400 rounded-full"></div>
+              <div class="w-1 h-12 bg-white rounded-full"></div>
+              <div class="w-1 h-6 bg-cyan-400 rounded-full"></div>
+              <div class="w-1 h-10 bg-cyan-500 rounded-full"></div>
+              <div class="w-1 h-3 bg-cyan-500 rounded-full"></div>
+              <div class="w-1 h-7 bg-emerald-400 rounded-full"></div>
+              <div class="w-1 h-11 bg-white rounded-full"></div>
+              <div class="w-1 h-5 bg-orange-400 rounded-full"></div>
+            </div>
+
+            <div class="truncate text-xs font-black">
+              Daft Punk — Instant Crush
+            </div>
+          </div>
+
+          <!-- 4 ЦВЕТНЫХ ЭНКОДЕРА (ФИРМЕННАЯ ФИШКА OP-1) -->
+          <div class="grid grid-cols-4 gap-2 pt-1 text-center">
+            <!-- Синий: Громкость -->
+            <div class="flex flex-col items-center gap-1">
+              <div class="w-11 h-11 rounded-full bg-blue-500 border-2 border-stone-800 shadow-md flex items-center justify-center relative cursor-pointer active:scale-95">
+                <div class="w-1.5 h-1.5 rounded-full bg-white absolute top-1.5"></div>
+              </div>
+              <span class="text-xs font-bold text-stone-600">VOL</span>
+            </div>
+            <!-- Оранжевый: Перемотка -->
+            <div class="flex flex-col items-center gap-1">
+              <div class="w-11 h-11 rounded-full bg-orange-500 border-2 border-stone-800 shadow-md flex items-center justify-center relative cursor-pointer active:scale-95">
+                <div class="w-1.5 h-1.5 rounded-full bg-white absolute top-1.5"></div>
+              </div>
+              <span class="text-xs font-bold text-stone-600">SEEK</span>
+            </div>
+            <!-- Зеленый: Сервис -->
+            <div class="flex flex-col items-center gap-1">
+              <div class="w-11 h-11 rounded-full bg-emerald-500 border-2 border-stone-800 shadow-md flex items-center justify-center relative cursor-pointer active:scale-95">
+                <div class="w-1.5 h-1.5 rounded-full bg-white absolute top-1.5"></div>
+              </div>
+              <span class="text-xs font-bold text-stone-600">HUB</span>
+            </div>
+            <!-- Желтый: Кэш/Режим -->
+            <div class="flex flex-col items-center gap-1">
+              <div class="w-11 h-11 rounded-full bg-yellow-400 border-2 border-stone-800 shadow-md flex items-center justify-center relative cursor-pointer active:scale-95">
+                <div class="w-1.5 h-1.5 rounded-full bg-stone-900 absolute top-1.5"></div>
+              </div>
+              <span class="text-xs font-bold text-stone-600">CACHE</span>
+            </div>
+          </div>
+
+          <!-- Клавиши переключения -->
+          <div class="grid grid-cols-3 gap-2 pt-2">
+            <button class="py-3 rounded-xl bg-white border border-stone-300 text-xs font-black shadow-xs active:bg-stone-100">◀ PREV</button>
+            <button class="py-3 rounded-xl bg-stone-900 text-white text-xs font-black shadow-md active:scale-95">PLAY / PAUSE</button>
+            <button class="py-3 rounded-xl bg-white border border-stone-300 text-xs font-black shadow-xs active:bg-stone-100">NEXT ▶</button>
+          </div>
+
+          <!-- Нижний статус кэша -->
+          <div class="flex justify-between items-center text-xs font-bold text-stone-500 pt-1">
+            <span>OFFLINE CACHE: 180MB</span>
+            <span class="text-emerald-700">✓ SYNCED</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ==================================================================== -->
+    <!-- КОНЦЕПТ 4: GAMEBOY POCKET (ПИКСЕЛЬНЫЙ РЕТРО-ХЭНДХЕЛД 90-х)            -->
+    <!-- ==================================================================== -->
+    <div id="card-concept-4" class="concept-view flex flex-col items-center gap-4 transition-all">
+      <div class="text-center mb-1">
+        <span class="text-xs px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/30 font-bold uppercase tracking-wider">Концепт 4</span>
+        <h2 class="text-sm font-black text-white mt-1">GameBoy Pocket (Pixel Edition)</h2>
+        <p class="text-xs text-stone-400">Точечный LCD экран, крестовина D-pad, кнопки A/B, чиптюн-ностальгия</p>
+      </div>
+
+      <!-- Корпус телефона -->
+      <div class="w-[360px] p-4 rounded-[48px] bg-[#6B7280] border-4 border-stone-900 shadow-2xl">
+        <div class="w-full bg-[#4B5563] rounded-[36px] p-5 flex flex-col gap-4">
+          
+          <!-- ВИНТАЖНЫЙ LCD ЭКРАН (СЕЛЕНО-ОЛИВКОВЫЙ) -->
+          <div class="w-full aspect-[4/3] rounded-xl bg-[#8B956D] border-4 border-stone-800 p-3 flex flex-col justify-between font-pixel text-[#1C2412] shadow-inner">
+            <div class="flex justify-between text-[11px] leading-tight">
+              <span>ZEN-BOY</span>
+              <span>BATTERY■</span>
+            </div>
+
+            <!-- Пиксельный трек -->
+            <div class="my-auto text-center space-y-1">
+              <div class="text-xs font-bold truncate">MR.KITTY</div>
+              <div class="text-[11px] truncate">AFTER DARK</div>
+              <div class="text-[11px] opacity-75 mt-1">01:42 / 04:18</div>
+            </div>
+
+            <div class="flex justify-between text-[11px]">
+              <span>[VK-MUSIC]</span>
+              <span>CACHED:OK</span>
+            </div>
+          </div>
+
+          <!-- ОРГАНЫ УПРАВЛЕНИЯ В ДУХЕ GAMEBOY -->
+          <div class="flex items-center justify-between pt-2 px-2">
+            
+            <!-- Крестовина D-PAD (Громкость и Треки) -->
+            <div class="relative w-24 h-24 flex items-center justify-center">
+              <div class="absolute w-8 h-24 bg-stone-900 rounded-sm"></div>
+              <div class="absolute w-24 h-8 bg-stone-900 rounded-sm"></div>
+              <button class="absolute top-0 w-8 h-8 flex items-center justify-center text-xs text-stone-400">▲</button>
+              <button class="absolute bottom-0 w-8 h-8 flex items-center justify-center text-xs text-stone-400">▼</button>
+              <button class="absolute left-0 w-8 h-8 flex items-center justify-center text-xs text-stone-400">◀</button>
+              <button class="absolute right-0 w-8 h-8 flex items-center justify-center text-xs text-stone-400">▶</button>
+            </div>
+
+            <!-- Круглые кнопки A и B (под углом) -->
+            <div class="flex gap-3 rotate-[-25deg]">
+              <div class="flex flex-col items-center gap-1">
+                <button class="w-11 h-11 rounded-full bg-[#9F1239] border-2 border-stone-900 text-white font-bold text-xs shadow-md active:translate-y-0.5">B</button>
+                <span class="text-xs font-bold text-stone-300">КЭШ</span>
+              </div>
+              <div class="flex flex-col items-center gap-1">
+                <button class="w-11 h-11 rounded-full bg-[#9F1239] border-2 border-stone-900 text-white font-bold text-xs shadow-md active:translate-y-0.5">A</button>
+                <span class="text-xs font-bold text-stone-300">PLAY</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Кнопки SELECT и START внизу -->
+          <div class="flex justify-center gap-6 pt-2">
+            <div class="flex flex-col items-center gap-0.5">
+              <div class="w-10 h-3 bg-stone-800 rounded-full rotate-[-25deg] border border-stone-700 cursor-pointer"></div>
+              <span class="text-[11px] font-bold text-stone-300 tracking-wider">SELECT</span>
+            </div>
+            <div class="flex flex-col items-center gap-0.5">
+              <div class="w-10 h-3 bg-stone-800 rounded-full rotate-[-25deg] border border-stone-700 cursor-pointer"></div>
+              <span class="text-[11px] font-bold text-stone-300 tracking-wider">START</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    function showConcept(num) {
+      document.querySelectorAll('.concept-view').forEach(el => el.classList.add('hidden'));
+      document.getElementById(`card-concept-${num}`).classList.remove('hidden');
+
+      [1, 2, 3, 4].forEach(i => {
+        const btn = document.getElementById(`tab-${i}`);
+        if (i === num) {
+          btn.className = "px-3.5 py-2 rounded-xl bg-orange-600 text-white shadow-sm transition-all flex items-center gap-1.5";
+        } else {
+          btn.className = "px-3.5 py-2 rounded-xl text-stone-400 hover:text-white transition-all flex items-center gap-1.5";
+        }
+      });
+      document.getElementById('tab-all').className = "px-3 py-2 rounded-xl text-stone-400 hover:text-white transition-all flex items-center gap-1";
+    }
+
+    function showAllGrid() {
+      document.querySelectorAll('.concept-view').forEach(el => el.classList.remove('hidden'));
+      [1, 2, 3, 4].forEach(i => {
+        document.getElementById(`tab-${i}`).className = "px-3.5 py-2 rounded-xl text-stone-400 hover:text-white transition-all flex items-center gap-1.5";
+      });
+      document.getElementById('tab-all').className = "px-3 py-2 rounded-xl bg-orange-600 text-white shadow-sm transition-all flex items-center gap-1";
+    }
+
+    // По умолчанию открываем Концепт 1
+    showConcept(1);
+  </script>
+</body>
+</html>

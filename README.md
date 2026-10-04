@@ -1,10 +1,15 @@
-# 📻 Zen Sound
+<div align="center">
+  <img src="assets/logo.jpg" alt="Zen Sound Logo" width="220" style="border-radius: 28px;" />
 
-> **Минималистичный ретро-плеер для души.** Чистый звук, изолированные стриминговые хабы, самохостинг и раздельный офлайн-кэш без лишнего мусора и раздутого софта.
+  # 📻 Zen Sound
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Style: Neo-Brutalist Retro](https://img.shields.io/badge/Style-Retro%20Gadget-orange.svg)](#дизайн-и-темы)
-[![Memory: < 50MB](https://img.shields.io/badge/RAM-%3C%2050%20MB-brightgreen.svg)](#философия-легкости)
+  **Минималистичный ретро-плеер для души.**<br>
+  Чистый звук, изолированные стриминговые хабы, самохостинг и раздельный офлайн-кэш без лишнего мусора и раздутого софта.
+
+  [![Style: Neo-Brutalist Retro](https://img.shields.io/badge/Style-Retro%20Gadget-orange.svg)](#дизайн-и-темы)
+  [![Memory: < 50MB](https://img.shields.io/badge/RAM-%3C%2050%20MB-brightgreen.svg)](#философия-легкости)
+  [![License: All Rights Reserved](https://img.shields.io/badge/License-All%20Rights%20Reserved-blue.svg)](LICENSE)
+</div>
 
 ---
 
@@ -42,16 +47,21 @@
 
 ```
 zen-sound/
+├── assets/               # Фирменные логотипы и графические материалы
+│   ├── logo.jpg
+│   └── logo-variations.jpg
 ├── docs/                 # Архитектурная документация и спецификации
 │   └── ARCHITECTURE.md   # Устройство аудиодвижка, кэша и плагинов
 ├── themes/               # Коллекция официальных и пользовательских скинов
 │   ├── braun-80s.json
 │   └── cyberdeck.json
-├── web-prototype/        # Интерактивный HTML/CSS прототип UI
-│   └── index.html
+├── web-prototype/        # Интерактивные прототипы UI
+│   ├── index.html
+│   └── concept1_refined.html
 ├── src/                  # Исходный код приложения
+├── config.example.toml   # Базовый конфигурационный файл
 ├── .gitignore
-├── LICENSE
+├── LICENSE               # All Rights Reserved
 └── README.md
 ```
 
@@ -60,6 +70,7 @@ zen-sound/
 ## 🗺️ Дорожная карта (Roadmap)
 
 - [x] Концепция и интерактивный прототип интерфейса.
+- [x] Фирменный стиль и официальный логотип (ZEN + непрерывная волна sound).
 - [x] Архитектура изолированных хабов и раздельного кэша.
 - [ ] Базовый каркас кроссплатформенного приложения (десктоп + мобильные).
 - [ ] Нативный аудиодвижок (аппаратное декодирование FLAC, MP3, OPUS).
@@ -73,4 +84,4 @@ zen-sound/
 
 ## 📄 Лицензия
 
-Проект распространяется под свободной лицензией [MIT](LICENSE).
+Copyright (c) 2026 keks84725. Все права защищены. Подробнее см. в [LICENSE](LICENSE).

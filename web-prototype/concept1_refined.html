@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zen Sound — Dark Watermark Edition</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    /* Стиль Neo-Brutalism & Retro Dark Gadget */
+    .retro-border { border: 3.5px solid #0f0f11; }
+    .retro-border-sm { border: 2px solid #0f0f11; }
+    .retro-shadow { box-shadow: 7px 7px 0px #0f0f11; }
+    .retro-shadow-sm { box-shadow: 2.5px 2.5px 0px #0f0f11; }
+    .retro-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0px #0f0f11 !important;
+    }
+
+    /* Кастомный тонкий скроллбар */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 9999px; }
+
+    /* Аналоговый ретро-ползунок */
+    input[type=range] { -webkit-appearance: none; background: transparent; }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 18px;
+      width: 18px;
+      border-radius: 50%;
+      background: #f97316;
+      border: 2px solid #0f0f11;
+      cursor: pointer;
+      margin-top: -6px;
+      box-shadow: 1px 1px 0px #0f0f11;
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 6px;
+      cursor: pointer;
+      background: #3f3f46;
+      border-radius: 9999px;
+      border: 1.5px solid #0f0f11;
+    }
+
+    /* Мягкое неоновое свечение для кардиограммы логотипа */
+    .glow-amber {
+      filter: drop-shadow(0 0 8px rgba(249, 115, 22, 0.45));
+    }
+  </style>
+</head>
+<body class="bg-[#0b0c0e] text-stone-100 min-h-screen p-4 md:p-8 flex flex-col items-center justify-start select-none font-mono">
+
+  <!-- ВЕРХНИЙ ИНФО-БАР -->
+  <header class="w-full max-w-md mb-6 flex items-center justify-between border-b border-stone-800 pb-4">
+    <div class="flex items-center gap-2">
+      <span class="w-8 h-8 rounded-lg bg-orange-600 flex items-center justify-center font-black text-white text-sm shadow-md">Æ</span>
+      <div>
+        <h1 class="text-xs font-black uppercase tracking-wider text-white">Zen Sound / Dark Watermark</h1>
+        <p class="text-[11px] text-stone-400">Логотип на фоне • Сплошной текст треков без рамок</p>
+      </div>
+    </div>
+    <span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 font-bold border border-orange-500/30">v1.2</span>
+  </header>
+
+  <!-- КОРПУС СМАРТФОНА (ТЕМНЫЙ ГРАФИТ С ОРАНЖЕВЫМ БАМПЕРОМ) -->
+  <div class="w-[370px] p-3.5 rounded-[46px] bg-orange-600 border-[3.5px] border-[#0f0f11] retro-shadow relative">
+    
+    <!-- ВНУТРЕННЯЯ ЛИЦЕВАЯ ПАНЕЛЬ -->
+    <div class="w-full bg-[#18191d] text-stone-100 rounded-[36px] p-4 border-[2.5px] border-[#0f0f11] flex flex-col justify-between min-h-[640px] relative overflow-hidden">
+      
+      <!-- ======================================================== -->
+      <!-- ВЕРХНЯЯ НАВИГАЦИЯ: 3 ПОЛОСКИ + СЕРВИС + РЕЖИМ (DROPDOWN) -->
+      <!-- ======================================================== -->
+      <div class="relative z-30 pb-2 border-b border-stone-800">
+        <div class="flex items-center justify-between gap-1.5">
+          
+          <!-- 1. КНОПКА 3 ПОЛОСКИ (ВЫБОР СЕРВИСА) -->
+          <button onclick="toggleServiceDrawer()" class="p-1.5 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-200 border-2 border-stone-900 retro-shadow-sm retro-btn flex items-center justify-center shrink-0" title="Выбрать сервис">
+            <svg class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+
+          <!-- 2. ОТОБРАЖЕНИЕ ВЫБРАННОГО СЕРВИСА -->
+          <div id="serviceBadge" class="flex items-center gap-1.5 text-xs font-black px-2.5 py-1 rounded-xl bg-amber-500 text-stone-950 border-2 border-stone-900 shrink-0">
+            <span>🟡</span>
+            <span id="serviceBadgeName">Яндекс</span>
+          </div>
+
+          <!-- 3. РЕЖИМ РАБОТЫ С ВЫПАДАЮЩИМ СПИСКОМ -->
+          <div class="relative">
+            <button onclick="toggleModeDropdown()" id="modeDropdownBtn" class="flex items-center gap-1 text-xs font-black px-2.5 py-1 rounded-xl bg-stone-800 text-white border-2 border-stone-900 retro-shadow-sm retro-btn">
+              <span id="currentModeName">🌊 Волна</span>
+              <svg class="w-3.5 h-3.5 stroke-[3] transition-transform duration-200" id="dropdownArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+
+            <!-- ВЫПАДАЮЩИЙ СПИСОК РЕЖИМОВ -->
+            <div id="modeDropdownMenu" class="absolute right-0 top-9 w-44 bg-[#1e2025] rounded-xl border-2 border-stone-800 shadow-2xl hidden flex-col p-1.5 z-40 space-y-1">
+              <button onclick="selectMode('🌊 Моя волна')" class="w-full text-left px-2 py-1.5 rounded-lg hover:bg-amber-500 hover:text-stone-950 text-xs font-black flex items-center justify-between text-stone-200">
+                <span>🌊 Моя волна</span>
+                <span class="text-[10px] opacity-70">Авто</span>
+              </button>
+              <button onclick="selectMode('❤️ Избранное')" class="w-full text-left px-2 py-1.5 rounded-lg hover:bg-amber-500 hover:text-stone-950 text-xs font-black flex items-center justify-between text-stone-200">
+                <span>❤️ Избранное</span>
+                <span class="text-[10px] opacity-70">142</span>
+              </button>
+              <button onclick="selectMode('✨ Рекомендации')" class="w-full text-left px-2 py-1.5 rounded-lg hover:bg-amber-500 hover:text-stone-950 text-xs font-black flex items-center justify-between text-stone-200">
+                <span>✨ Рекомендации</span>
+                <span class="text-[10px] opacity-70">Микс</span>
+              </button>
+              <button onclick="selectMode('💾 Локальный кэш')" class="w-full text-left px-2 py-1.5 rounded-lg hover:bg-amber-500 hover:text-stone-950 text-xs font-black flex items-center justify-between text-stone-200 border-t border-stone-800 pt-1.5">
+                <span>💾 Локальный кэш</span>
+                <span class="text-[10px] text-emerald-400 font-bold">Офлайн</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- ЦЕНТР ЭКРАНА: ПОЛУПРОЗРАЧНЫЙ ЛОГОТИП 4 + СПЛОШНОЙ СПИСОК -->
+      <!-- ======================================================== -->
+      <div class="flex-1 my-3 flex flex-col min-h-0 relative overflow-hidden rounded-2xl bg-[#121316] border border-stone-800/80 p-3">
+        
+        <!-- ПОЛУПРОЗРАЧНЫЙ ФОНОВЫЙ ЛОГОТИП (КОНЦЕПТ 4) -->
+        <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none opacity-20 select-none z-0">
+          <!-- Текст ZEN -->
+          <div class="text-7xl font-black tracking-widest text-[#FAF5EC] uppercase" style="font-family: 'Arial Black', sans-serif;">
+            ZEN
+          </div>
+          <!-- Векторная кардиограмма sound -->
+          <svg class="w-64 h-16 glow-amber" viewBox="0 0 260 70" fill="none">
+            <!-- Звуковая волна с буквами sound -->
+            <path d="M5 35 H30 L38 18 L46 52 L54 28 L62 38 
+                     C68 38, 72 24, 82 24 C92 24, 92 48, 80 48 C72 48, 74 36, 85 36 
+                     C95 36, 95 48, 108 48 C120 48, 120 24, 108 24 C96 24, 98 48, 114 48
+                     C122 48, 124 36, 134 36 C144 36, 144 48, 154 48 L154 24 L154 48
+                     C164 48, 168 36, 178 36 C188 36, 188 48, 198 48 L198 15 L198 48
+                     C208 48, 214 48, 222 35 L230 18 L238 52 L246 28 L255 35" 
+                  stroke="#F97316" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <!-- Заголовок режима -->
+        <div class="flex items-center justify-between pb-2 mb-1 border-b border-stone-800/60 text-xs font-black z-10">
+          <span id="playlistHeaderTitle" class="uppercase tracking-wider text-orange-400">Плейлист: Моя волна</span>
+          <span class="text-[11px] text-stone-500 font-bold" id="tracksCount">7 треков</span>
+        </div>
+
+        <!-- СПИСОК ТРЕКОВ СПЛОШНЫМ ТЕКСТОМ (БЕЗ ОБВОДОК И РАМОК!) -->
+        <div class="flex-1 overflow-y-auto space-y-2 pr-1 z-10" id="playlistTracksList">
+          <!-- Рендерится скриптом: только чистый текст, номера, название, длительность -->
+        </div>
+
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- НИЖНЯЯ ПАНЕЛЬ ПЛЕЕРА: КЭШ СЛЕВА, ЛАЙК СПРАВА, КОНТРОЛЫ   -->
+      <!-- ======================================================== -->
+      <div class="pt-2 border-t border-stone-800 flex flex-col gap-2 relative z-30">
+        
+        <!-- СТРОКА ТРЕКА: КНОПКА КЭША СЛЕВА | НАЗВАНИЕ В ЦЕНТРЕ | СЕРДЕЧКО СПРАВА -->
+        <div class="flex items-center justify-between gap-2 bg-[#121316] p-1.5 rounded-xl border border-stone-800">
+          
+          <!-- 1. КНОПКА ЗАГРУЗКИ В КЭШ (СЛЕВА) -->
+          <button onclick="toggleCurrentTrackCache()" id="btnCacheCurrent" class="w-8 h-8 rounded-lg border-2 border-stone-900 bg-emerald-500 text-stone-950 flex items-center justify-center shrink-0 retro-shadow-sm retro-btn" title="Загрузить в кэш">
+            <span id="cacheIconCurrent" class="text-sm font-bold">💾</span>
+          </button>
+
+          <!-- 2. НАЗВАНИЕ ТРЕКА И АРТИСТ (В ЦЕНТРЕ — ЯРКИЙ БЕЛЫЙ И ОРАНЖЕВЫЙ) -->
+          <div class="min-w-0 flex-1 text-center px-1">
+            <h3 id="currentTrackTitle" class="text-xs font-black truncate text-white">Группа крови</h3>
+            <p id="currentTrackArtist" class="text-[11px] text-orange-400 truncate font-bold">КИНО</p>
+          </div>
+
+          <!-- 3. СЕРДЕЧКО (СПРАВА) -->
+          <button onclick="toggleCurrentTrackFavorite()" id="btnFavoriteCurrent" class="w-8 h-8 rounded-lg border-2 border-stone-900 bg-rose-500 text-white flex items-center justify-center shrink-0 retro-shadow-sm retro-btn" title="В избранное">
+            <span id="heartIconCurrent" class="text-sm">❤️</span>
+          </button>
+
+        </div>
+
+        <!-- АНАЛОГОВЫЙ ПОЛЗУНОК ВРЕМЕНИ -->
+        <div class="space-y-0.5 pt-0.5">
+          <input type="range" id="seekScrubber" min="0" max="100" value="40" oninput="updateScrubberTime(this.value)" class="w-full">
+          <div class="flex justify-between text-[11px] font-bold text-stone-400 px-0.5">
+            <span id="timeElapsed" class="text-orange-400">01:42</span>
+            <span id="timeTotal">04:45</span>
+          </div>
+        </div>
+
+        <!-- БОЛЬШИЕ МЕХАНИЧЕСКИЕ КНОПКИ ВОСПРОИЗВЕДЕНИЯ -->
+        <div class="flex items-center justify-between pt-1">
+          <!-- Перемешать -->
+          <button class="p-2 retro-btn text-stone-400 hover:text-white">
+            <svg class="w-5 h-5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 3h5v5M4 20l17-17M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+          </button>
+          
+          <!-- Предыдущий трек -->
+          <button onclick="prevTrack()" class="p-2 retro-btn text-stone-200 hover:text-white">
+            <svg class="w-6 h-6 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="m19 20-10-8 10-8v16ZM5 19V5"/></svg>
+          </button>
+
+          <!-- КРУГЛАЯ КНОПКА PLAY / PAUSE -->
+          <button onclick="togglePlayPause()" id="playPauseBtn" class="w-13 h-13 rounded-full bg-orange-600 border-2 border-[#0f0f11] retro-shadow text-white flex items-center justify-center retro-btn">
+            <svg id="playIconSvg" class="w-6 h-6 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 15V9m4 6V9"/></svg>
+          </button>
+
+          <!-- Следующий трек -->
+          <button onclick="nextTrack()" class="p-2 retro-btn text-stone-200 hover:text-white">
+            <svg class="w-6 h-6 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="m5 4 10 8-10 8V4ZM19 5v14"/></svg>
+          </button>
+
+          <!-- Повтор -->
+          <button class="p-2 retro-btn text-stone-400 hover:text-white">
+            <svg class="w-5 h-5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="m17 1 4 4-4 4m-14 6 4 4-4 4M21 5H9a4 4 0 0 0-4 4v2m-2 4h12a4 4 0 0 0 4-4v-2"/></svg>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- ВЫДВИЖНОЕ МЕНЮ ВЫБОРА СЕРВИСА (ПО НАЖАТИЮ НА 3 ПОЛОСКИ)   -->
+      <!-- ======================================================== -->
+      <div id="serviceDrawer" class="absolute inset-0 bg-[#16171b] p-5 z-50 hidden flex-col justify-between transition-all">
+        <div class="space-y-3">
+          <div class="flex items-center justify-between border-b border-stone-800 pb-2">
+            <span class="text-xs font-black uppercase tracking-wider text-orange-400">Выберите стриминг:</span>
+            <button onclick="toggleServiceDrawer()" class="text-xs font-black px-2 py-1 bg-stone-800 hover:bg-stone-700 rounded text-stone-300 retro-btn">✕ ЗАКРЫТЬ</button>
+          </div>
+          
+          <div class="space-y-2 pt-1">
+            <button onclick="changeService('yandex')" class="w-full p-3 rounded-xl border-2 border-stone-900 bg-amber-500 text-stone-950 flex items-center justify-between retro-shadow-sm retro-btn text-left">
+              <div class="flex items-center gap-2">
+                <span class="text-xl">🟡</span>
+                <div>
+                  <div class="text-xs font-black">Яндекс Музыка</div>
+                  <div class="text-[11px] opacity-80">Моя волна • Избранное • Плейлисты</div>
+                </div>
+              </div>
+              <span class="text-xs font-black">➔</span>
+            </button>
+
+            <button onclick="changeService('spotify')" class="w-full p-3 rounded-xl border-2 border-stone-900 bg-emerald-500 text-stone-950 flex items-center justify-between retro-shadow-sm retro-btn text-left">
+              <div class="flex items-center gap-2">
+                <span class="text-xl">🟢</span>
+                <div>
+                  <div class="text-xs font-black">Spotify</div>
+                  <div class="text-[11px] opacity-80">Daily Mix • Любимые треки</div>
+                </div>
+              </div>
+              <span class="text-xs font-black">➔</span>
+            </button>
+
+            <button onclick="changeService('vk')" class="w-full p-3 rounded-xl border-2 border-stone-900 bg-sky-500 text-stone-950 flex items-center justify-between retro-shadow-sm retro-btn text-left">
+              <div class="flex items-center gap-2">
+                <span class="text-xl">🔵</span>
+                <div>
+                  <div class="text-xs font-black">VK Музыка</div>
+                  <div class="text-[11px] opacity-80">Моя музыка • Рекомендации</div>
+                </div>
+              </div>
+              <span class="text-xs font-black">➔</span>
+            </button>
+
+            <button onclick="changeService('server')" class="w-full p-3 rounded-xl border-2 border-stone-900 bg-purple-500 text-stone-950 flex items-center justify-between retro-shadow-sm retro-btn text-left">
+              <div class="flex items-center gap-2">
+                <span class="text-xl">🏠</span>
+                <div>
+                  <div class="text-xs font-black">Домашний сервер (FLAC)</div>
+                  <div class="text-[11px] opacity-80">Subsonic API • Офлайн архив</div>
+                </div>
+              </div>
+              <span class="text-xs font-black">➔</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="text-center text-[11px] font-bold text-stone-500 border-t border-stone-800 pt-2">
+          У каждого сервиса независимый кэш и свои режимы
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const servicesData = {
+      yandex: {
+        badgeEmoji: "🟡",
+        name: "Яндекс",
+        modes: ["🌊 Моя волна", "❤️ Избранное", "✨ Рекомендации", "💾 Локальный кэш"],
+        tracks: [
+          { id: 1, title: "Группа крови", artist: "КИНО", duration: "04:45", cached: true, liked: true },
+          { id: 2, title: "After Dark", artist: "Mr.Kitty", duration: "04:18", cached: false, liked: true },
+          { id: 3, title: "Лесник", artist: "Король и Шут", duration: "03:12", cached: true, liked: false },
+          { id: 4, title: "Спокойная ночь", artist: "КИНО", duration: "06:08", cached: false, liked: true },
+          { id: 5, title: "Кукла колдуна", artist: "Король и Шут", duration: "03:24", cached: true, liked: false },
+          { id: 6, title: "Судно (Борис Рыжий)", artist: "Молчат Дома", duration: "02:21", cached: false, liked: true },
+          { id: 7, title: "Пачка сигарет", artist: "КИНО", duration: "04:28", cached: true, liked: true }
+        ]
+      },
+      spotify: {
+        badgeEmoji: "🟢",
+        name: "Spotify",
+        modes: ["⚡ Daily Mix", "💚 Любимые", "🧭 Discover", "💾 Локальный кэш"],
+        tracks: [
+          { id: 10, title: "Starboy", artist: "The Weeknd, Daft Punk", duration: "03:50", cached: false, liked: true },
+          { id: 11, title: "Get Lucky", artist: "Daft Punk, Pharrell", duration: "04:08", cached: true, liked: true },
+          { id: 12, title: "Blinding Lights", artist: "The Weeknd", duration: "03:20", cached: false, liked: false },
+          { id: 13, title: "Instant Crush", artist: "Daft Punk", duration: "05:37", cached: true, liked: true }
+        ]
+      },
+      vk: {
+        badgeEmoji: "🔵",
+        name: "VK Музыка",
+        modes: ["🎵 Моя музыка", "✨ Рекомендации", "👥 Друзья", "💾 Локальный кэш"],
+        tracks: [
+          { id: 20, title: "Юморист", artist: "FACE", duration: "02:54", cached: false, liked: false },
+          { id: 21, title: "Танцы", artist: "sspencer", duration: "03:10", cached: true, liked: true }
+        ]
+      },
+      server: {
+        badgeEmoji: "🏠",
+        name: "Сервер",
+        modes: ["💿 FLAC Архив", "⭐ Избранное FLAC", "📁 Папки", "💾 Локальный кэш"],
+        tracks: [
+          { id: 30, title: "Midnight City", artist: "M83", duration: "03:42", cached: true, liked: true },
+          { id: 31, title: "Resonance", artist: "HOME", duration: "03:32", cached: true, liked: true }
+        ]
+      }
+    };
+
+    let currentService = 'yandex';
+    let currentMode = '🌊 Моя волна';
+    let activeTrackIndex = 0;
+    let isPlaying = true;
+
+    // Рендер плейлиста СПЛОШНЫМ ТЕКСТОМ БЕЗ РАМОК
+    function renderPlaylist() {
+      const listEl = document.getElementById('playlistTracksList');
+      const tracks = servicesData[currentService].tracks;
+      listEl.innerHTML = '';
+
+      document.getElementById('playlistHeaderTitle').innerText = `Плейлист: ${currentMode}`;
+      document.getElementById('tracksCount').innerText = `${tracks.length} треков`;
+
+      tracks.forEach((t, index) => {
+        const isCurrent = (index === activeTrackIndex);
+        const row = document.createElement('div');
+        
+        // Никаких рамок! Чистый текст с мягким ховером
+        row.className = `py-1.5 px-2 rounded-lg cursor-pointer flex items-center justify-between transition-colors ${
+          isCurrent 
+            ? 'bg-orange-500/15 text-orange-400 font-black' 
+            : 'text-stone-300 hover:text-white hover:bg-white/5 font-medium'
+        }`;
+        
+        row.onclick = () => {
+          activeTrackIndex = index;
+          isPlaying = true;
+          updatePlayerUI();
+          renderPlaylist();
+        };
+
+        row.innerHTML = `
+          <div class="flex items-center gap-2.5 min-w-0 pr-2">
+            <span class="text-[11px] ${isCurrent ? 'text-orange-400 font-black' : 'text-stone-500'} w-5 shrink-0">
+              ${isCurrent ? '▶' : (index + 1 < 10 ? '0' + (index + 1) : index + 1)}
+            </span>
+            <div class="min-w-0">
+              <span class="text-xs truncate block ${isCurrent ? 'text-white font-black' : 'text-stone-100'}">${t.title}</span>
+              <span class="text-[10px] truncate block ${isCurrent ? 'text-orange-400/90' : 'text-stone-500'}">${t.artist}</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2.5 shrink-0">
+            <span class="text-[11px]">${t.liked ? '❤️' : ''}</span>
+            <span class="text-[11px]">${t.cached ? '<span class="text-emerald-400">●</span>' : ''}</span>
+            <span class="text-[10px] ${isCurrent ? 'text-orange-400' : 'text-stone-400'} font-bold">${t.duration}</span>
+          </div>
+        `;
+        listEl.appendChild(row);
+      });
+    }
+
+    // Обновление нижней панели управления
+    function updatePlayerUI() {
+      const track = servicesData[currentService].tracks[activeTrackIndex];
+      document.getElementById('currentTrackTitle').innerText = track.title;
+      document.getElementById('currentTrackArtist').innerText = track.artist;
+      document.getElementById('timeTotal').innerText = track.duration;
+
+      // Кнопка кэша слева
+      const cacheBtn = document.getElementById('btnCacheCurrent');
+      const cacheIcon = document.getElementById('cacheIconCurrent');
+      if (track.cached) {
+        cacheBtn.className = "w-8 h-8 rounded-lg border-2 border-stone-900 bg-emerald-500 text-stone-950 flex items-center justify-center shrink-0 retro-shadow-sm retro-btn";
+        cacheIcon.innerText = "💾";
+      } else {
+        cacheBtn.className = "w-8 h-8 rounded-lg border-2 border-stone-900 bg-stone-700 text-stone-400 flex items-center justify-center shrink-0 retro-shadow-sm retro-btn";
+        cacheIcon.innerText = "☁️";
+      }
+
+      // Кнопка сердечка справа
+      const favBtn = document.getElementById('btnFavoriteCurrent');
+      const heartIcon = document.getElementById('heartIconCurrent');
+      if (track.liked) {
+        favBtn.className = "w-8 h-8 rounded-lg border-2 border-stone-900 bg-rose-500 text-white flex items-center justify-center shrink-0 retro-shadow-sm retro-btn";
+        heartIcon.innerText = "❤️";
+      } else {
+        favBtn.className = "w-8 h-8 rounded-lg border-2 border-stone-900 bg-stone-800 text-stone-500 flex items-center justify-center shrink-0 retro-shadow-sm retro-btn";
+        heartIcon.innerText = "🤍";
+      }
+
+      // Кнопка Play/Pause
+      const playSvg = isPlaying
+        ? `<svg class="w-6 h-6 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 15V9m4 6V9"/></svg>`
+        : `<svg class="w-6 h-6 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`;
+      document.getElementById('playIconSvg').innerHTML = playSvg;
+    }
+
+    // Переключение сервиса
+    function changeService(srv) {
+      currentService = srv;
+      activeTrackIndex = 0;
+      const s = servicesData[srv];
+      document.getElementById('serviceBadge').innerHTML = `<span>${s.badgeEmoji}</span> <span>${s.name}</span>`;
+      currentMode = s.modes[0];
+      document.getElementById('currentModeName').innerText = currentMode;
+      
+      const menu = document.getElementById('modeDropdownMenu');
+      menu.innerHTML = '';
+      s.modes.forEach(m => {
+        const b = document.createElement('button');
+        b.className = "w-full text-left px-2 py-1.5 rounded-lg hover:bg-amber-500 hover:text-stone-950 text-xs font-black flex items-center justify-between text-stone-200";
+        b.onclick = () => selectMode(m);
+        b.innerHTML = `<span>${m}</span>`;
+        menu.appendChild(b);
+      });
+
+      toggleServiceDrawer();
+      updatePlayerUI();
+      renderPlaylist();
+    }
+
+    // Выпадающее меню режимов
+    function toggleModeDropdown() {
+      const menu = document.getElementById('modeDropdownMenu');
+      const arrow = document.getElementById('dropdownArrow');
+      menu.classList.toggle('hidden');
+      menu.classList.toggle('flex');
+      arrow.classList.toggle('rotate-180');
+    }
+
+    function selectMode(mode) {
+      currentMode = mode;
+      document.getElementById('currentModeName').innerText = mode;
+      toggleModeDropdown();
+      renderPlaylist();
+    }
+
+    // Выдвижная шторка сервисов
+    function toggleServiceDrawer() {
+      const d = document.getElementById('serviceDrawer');
+      d.classList.toggle('hidden');
+      d.classList.toggle('flex');
+    }
+
+    function toggleCurrentTrackCache() {
+      const track = servicesData[currentService].tracks[activeTrackIndex];
+      track.cached = !track.cached;
+      updatePlayerUI();
+      renderPlaylist();
+    }
+
+    function toggleCurrentTrackFavorite() {
+      const track = servicesData[currentService].tracks[activeTrackIndex];
+      track.liked = !track.liked;
+      updatePlayerUI();
+      renderPlaylist();
+    }
+
+    function togglePlayPause() {
+      isPlaying = !isPlaying;
+      updatePlayerUI();
+    }
+
+    function nextTrack() {
+      const tracks = servicesData[currentService].tracks;
+      activeTrackIndex = (activeTrackIndex + 1) % tracks.length;
+      updatePlayerUI();
+      renderPlaylist();
+    }
+
+    function prevTrack() {
+      const tracks = servicesData[currentService].tracks;
+      activeTrackIndex = (activeTrackIndex - 1 + tracks.length) % tracks.length;
+      updatePlayerUI();
+      renderPlaylist();
+    }
+
+    function updateScrubberTime(val) {
+      const sec = Math.floor(285 * (val / 100));
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      document.getElementById('timeElapsed').innerText = `0${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    // Инициализация
+    updatePlayerUI();
+    renderPlaylist();
+  </script>
+</body>
+</html>
