@@ -1,0 +1,70 @@
+# ==========================================
+# Zen Sound — Git Ignore Rules
+# ==========================================
+
+# 1. Секреты, токены и персональные конфиги
+# (ни в коем случае не пушить личные токены на GitHub!)
+config.toml
+config.json
+*.token
+*.key
+tokens.json
+.env
+.env.local
+
+# 2. Локальный кэш аудиотреков и медиатека
+cache/
+audio_cache/
+*.mp3
+*.flac
+*.ogg
+*.wav
+*.m4a
+*.opus
+
+# 3. Базы данных и временные файлы SQLite
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# 4. Логи и системные дампы
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 5. Артефакты сборки (Flutter / Rust / Go / Node / C++)
+build/
+dist/
+out/
+target/
+bin/
+obj/
+node_modules/
+.dart_tool/
+.packages
+
+# 6. IDE и настройки редакторов
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.ntvs*
+*.user
+
+# 7. Системный мусор ОС
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+[Dd]esktop.ini
+.DS_Store
+.Spotlight-V100
+.Trashes

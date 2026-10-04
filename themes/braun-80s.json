@@ -1,0 +1,22 @@
+{
+  "name": "80s Braun",
+  "author": "Zen Sound Team",
+  "version": "1.0.0",
+  "description": "Винтажный тактильный стиль Dieter Rams / Braun 1980s",
+  "colors": {
+    "backgroundBody": "#e2e8f0",
+    "chassis": "#ea580c",
+    "faceplate": "#fbf7ee",
+    "border": "#18181b",
+    "accent": "#22c55e",
+    "coral": "#ef4444",
+    "text": "#18181b",
+    "mutedText": "#71717a",
+    "artPlaceholder": "#bfdbfe"
+  },
+  "metrics": {
+    "borderWidth": "3px",
+    "shadowOffset": "5px",
+    "borderRadius": "30px"
+  }
+}

@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aether Retro Player</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    /* Стиль Neo-Brutalism & Retro Gadget */
+    .retro-border { border: 3px solid #1a1a1a; }
+    .retro-border-sm { border: 2px solid #1a1a1a; }
+    .retro-shadow-lg { box-shadow: 7px 7px 0px #1a1a1a; }
+    .retro-shadow-md { box-shadow: 4px 4px 0px #1a1a1a; }
+    .retro-shadow-sm { box-shadow: 2px 2px 0px #1a1a1a; }
+    .retro-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0px #1a1a1a !important;
+    }
+    
+    /* Тонкий ретро-ползунок */
+    input[type=range] { -webkit-appearance: none; background: transparent; }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 18px;
+      width: 18px;
+      border-radius: 50%;
+      background: #f97316;
+      border: 2.5px solid #1a1a1a;
+      cursor: pointer;
+      margin-top: -6px;
+      box-shadow: 1px 1px 0px #1a1a1a;
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 6px;
+      cursor: pointer;
+      background: #f87171;
+      border-radius: 9999px;
+      border: 1.5px solid #1a1a1a;
+    }
+
+    /* Кастомные темы */
+    :root {
+      --theme-bg-body: #e2e8f0;
+      --theme-chassis: #ea580c;
+      --theme-face: #fbf7ee;
+      --theme-border: #18181b;
+      --theme-accent: #22c55e;
+      --theme-coral: #ef4444;
+      --theme-text: #18181b;
+      --theme-muted: #71717a;
+      --theme-art: #bfdbfe;
+    }
+
+    [data-theme="cyberdeck"] {
+      --theme-bg-body: #090d0b;
+      --theme-chassis: #059669;
+      --theme-face: #131c17;
+      --theme-border: #34d399;
+      --theme-accent: #10b981;
+      --theme-coral: #f59e0b;
+      --theme-text: #ecfdf5;
+      --theme-muted: #6ee7b7;
+      --theme-art: #064e3b;
+    }
+
+    [data-theme="gameboy"] {
+      --theme-bg-body: #9ca3af;
+      --theme-chassis: #6b7280;
+      --theme-face: #cad5b5;
+      --theme-border: #27272a;
+      --theme-accent: #9f1239;
+      --theme-coral: #be123c;
+      --theme-text: #1c2412;
+      --theme-muted: #4b5e32;
+      --theme-art: #8b956d;
+    }
+
+    [data-theme="industrial"] {
+      --theme-bg-body: #262626;
+      --theme-chassis: #eab308;
+      --theme-face: #1c1917;
+      --theme-border: #fafaf9;
+      --theme-accent: #eab308;
+      --theme-coral: #f97316;
+      --theme-text: #fafaf9;
+      --theme-muted: #a8a29e;
+      --theme-art: #292524;
+    }
+  </style>
+</head>
+<body id="bodyRoot" class="min-h-screen p-4 md:p-8 flex flex-col items-center justify-start font-mono select-none transition-colors duration-300" style="background-color: var(--theme-bg-body); color: var(--theme-text);">
+
+  <!-- ВЕРХНЯЯ ПАНЕЛЬ: ВЫБОР РЕЖИМА И ПЕРЕКЛЮЧАТЕЛЬ ТЕМ -->
+  <header class="w-full max-w-5xl flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b-2 border-stone-800">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-lg bg-[var(--theme-chassis)] retro-border retro-shadow-sm flex items-center justify-center font-black text-white text-lg">
+        Æ
+      </div>
+      <div>
+        <h1 class="text-base font-black tracking-wider uppercase">Aether / Isolated Hub</h1>
+        <p class="text-xs" style="color: var(--theme-muted);">Раздельные сервисы • Раздельный кэш • Чистый звук</p>
+      </div>
+    </div>
+
+    <!-- Темы и Режимы -->
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="flex items-center gap-2 bg-[var(--theme-face)] p-1.5 rounded-xl retro-border retro-shadow-sm text-xs font-bold">
+        <span class="text-xs pl-2" style="color: var(--theme-muted);">🎨 Скин:</span>
+        <button onclick="setTheme('braun')" class="px-2.5 py-1 rounded-lg bg-orange-600 text-white retro-btn">80s Braun</button>
+        <button onclick="setTheme('cyberdeck')" class="px-2.5 py-1 rounded-lg bg-emerald-800 text-emerald-200 retro-btn">Cyberdeck</button>
+        <button onclick="setTheme('gameboy')" class="px-2.5 py-1 rounded-lg bg-stone-700 text-stone-200 retro-btn">GameBoy</button>
+        <button onclick="setTheme('industrial')" class="px-2.5 py-1 rounded-lg bg-yellow-500 text-stone-900 retro-btn">Industrial</button>
+      </div>
+
+      <div class="flex items-center gap-1 bg-[var(--theme-face)] p-1.5 rounded-xl retro-border retro-shadow-sm text-xs font-bold">
+        <button onclick="setFormFactor('handheld')" id="btn-handheld" class="px-3 py-1 rounded-lg bg-stone-900 text-white retro-btn">📱 Карманный</button>
+        <button onclick="setFormFactor('mini')" id="btn-mini" class="px-3 py-1 rounded-lg hover:bg-stone-200 text-stone-900 retro-btn">🖥️ Десктоп-виджет</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ОСНОВНОЙ КОНТЕЙНЕР -->
+  <main class="w-full max-w-5xl flex items-center justify-center">
+
+    <!-- ВЕРТИКАЛЬНЫЙ КАРМАННЫЙ ПЛЕЕР С РАЗДЕЛЬНЫМИ СЕРВИСАМИ -->
+    <div id="view-handheld" class="w-[360px] p-3 rounded-[38px] bg-[var(--theme-chassis)] retro-border retro-shadow-lg transition-all duration-300 relative">
+      
+      <!-- Лицевая панель -->
+      <div class="w-full bg-[var(--theme-face)] rounded-[30px] p-5 flex flex-col gap-3 retro-border min-h-[580px] relative overflow-hidden">
+        
+        <!-- Верхняя служебная строка -->
+        <div class="flex items-center justify-between pb-1 border-b border-black/10">
+          <!-- КНОПКА "3 ПОЛОСКИ" (МЕНЮ СЕРВИСОВ) -->
+          <button onclick="toggleServiceDrawer()" class="p-1.5 rounded-lg bg-black/5 hover:bg-black/10 retro-border-sm retro-shadow-sm retro-btn flex items-center gap-1.5 text-xs font-bold" title="Сменить сервис">
+            <svg class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            <span>МЕНЮ</span>
+          </button>
+          
+          <!-- Индикатор текущего сервиса -->
+          <div id="currentServiceBadge" class="flex items-center gap-1.5 text-xs font-black px-2.5 py-1 rounded-full border-2 border-black/80 bg-amber-400 text-stone-900">
+            <span>🟡 Яндекс</span>
+          </div>
+
+          <button onclick="toggleServiceHub()" class="p-1 rounded hover:bg-black/5 retro-btn text-xs font-bold" title="Разделы сервиса">
+            📂 Разделы
+          </button>
+        </div>
+
+        <!-- ЭКРАН 1: ОСНОВНОЙ ПЛЕЕР (NOW PLAYING) -->
+        <div id="screen-player" class="flex flex-col gap-3">
+          
+          <!-- Обложка -->
+          <div class="w-full aspect-square rounded-2xl retro-border flex flex-col items-center justify-center relative overflow-hidden shadow-inner" style="background-color: var(--theme-art);">
+            <div id="coverEmoji" class="text-6xl drop-shadow-sm">🎸</div>
+            
+            <!-- Лейбл раздела (например: Моя волна / Избранное) -->
+            <div id="hubSectionBadge" class="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-[var(--theme-face)] retro-border-sm text-xs font-black">
+              🌊 Моя Волна
+            </div>
+
+            <div id="formatBadge" class="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-[var(--theme-face)] retro-border-sm text-xs font-bold">
+              MP3 320K
+            </div>
+          </div>
+
+          <!-- Метаданные трека -->
+          <div class="flex items-center justify-between pt-1">
+            <div class="min-w-0 pr-2">
+              <h3 id="handheldTitle" class="text-sm font-black truncate">Группа крови</h3>
+              <p id="handheldArtist" class="text-xs truncate font-medium" style="color: var(--theme-muted);">КИНО</p>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <!-- КНОПКА ИЗОЛИРОВАННОГО КЭША ДЛЯ ЭТОГО СЕРВИСА -->
+              <button onclick="toggleServiceTrackCache()" id="handheldCacheBtn" class="px-2 py-1 rounded-lg retro-border-sm bg-emerald-400 text-stone-900 flex items-center gap-1 retro-shadow-sm retro-btn text-xs font-black" title="Закешировать в память этого сервиса">
+                <span>💾</span>
+                <span id="cacheBtnText">В кэш</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Ползунок времени -->
+          <div class="space-y-1">
+            <input type="range" id="seekHandheld" min="0" max="100" value="40" oninput="syncSeek(this.value)" class="w-full">
+            <div class="flex justify-between text-xs font-bold">
+              <span id="timeCurrentH">1:42</span>
+              <span id="timeDurationH">4:45</span>
+            </div>
+          </div>
+
+          <!-- Кнопки управления -->
+          <div class="flex items-center justify-between pt-1">
+            <button class="p-2 retro-btn text-stone-700 hover:text-black">
+              <svg class="w-5 h-5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 3h5v5M4 20l17-17M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+            </button>
+            <button onclick="prevTrack()" class="p-2 retro-btn text-stone-900">
+              <svg class="w-6 h-6 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="m19 20-10-8 10-8v16ZM5 19V5"/></svg>
+            </button>
+            <!-- Круглый Play/Pause -->
+            <button onclick="togglePlay()" id="playBtnHandheld" class="w-13 h-13 rounded-full bg-[var(--theme-chassis)] retro-border retro-shadow-md text-white flex items-center justify-center retro-btn">
+              <svg id="playIconH" class="w-6 h-6 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 15V9m4 6V9"/></svg>
+            </button>
+            <button onclick="nextTrack()" class="p-2 retro-btn text-stone-900">
+              <svg class="w-6 h-6 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="m5 4 10 8-10 8V4ZM19 5v14"/></svg>
+            </button>
+            <button class="p-2 retro-btn text-stone-700 hover:text-black">
+              <svg class="w-5 h-5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="m17 1 4 4-4 4m-14 6 4 4-4 4M21 5H9a4 4 0 0 0-4 4v2m-2 4h12a4 4 0 0 0 4-4v-2"/></svg>
+            </button>
+          </div>
+
+          <!-- Нижняя статусная панель: Память кэша именно этого сервиса -->
+          <div class="mt-2 pt-2 border-t border-black/10 flex items-center justify-between text-xs font-bold" style="color: var(--theme-muted);">
+            <span id="serviceCacheLabel">Кэш Яндекса: 420 МБ</span>
+            <span class="text-emerald-600">● Онлайн</span>
+          </div>
+
+        </div>
+
+        <!-- ВЫДВИЖНОЕ МЕНЮ 1: ВЫБОР СЕРВИСА (ПО НАЖАТИЮ НА 3 ПОЛОСКИ) -->
+        <div id="drawer-services" class="absolute inset-0 bg-[var(--theme-face)] p-5 z-20 hidden flex-col justify-between transition-all">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between border-b-2 border-black pb-2">
+              <span class="text-xs font-black uppercase tracking-wider">Выберите сервис:</span>
+              <button onclick="toggleServiceDrawer()" class="text-xs font-black px-2 py-1 bg-black/10 rounded retro-btn">✕ ЗАКРЫТЬ</button>
+            </div>
+            
+            <p class="text-xs" style="color: var(--theme-muted);">Музыка и кэш сервисов изолированы друг от друга.</p>
+
+            <div class="space-y-2 pt-1">
+              <!-- Яндекс Музыка -->
+              <button onclick="selectService('yandex')" class="w-full p-3 rounded-xl retro-border-sm bg-amber-400 text-stone-900 flex items-center justify-between retro-shadow-sm retro-btn text-left">
+                <div class="flex items-center gap-2.5">
+                  <span class="text-xl">🟡</span>
+                  <div>
+                    <div class="text-xs font-black">Яндекс Музыка</div>
+                    <div class="text-[11px] opacity-80">Моя волна • Плейлисты • Кэш: 420 МБ</div>
+                  </div>
+                </div>
+                <span class="text-xs font-black">➔</span>
+              </button>
+
+              <!-- Spotify -->
+              <button onclick="selectService('spotify')" class="w-full p-3 rounded-xl retro-border-sm bg-emerald-400 text-stone-900 flex items-center justify-between retro-shadow-sm retro-btn text-left">
+                <div class="flex items-center gap-2.5">
+                  <span class="text-xl">🟢</span>
+                  <div>
+                    <div class="text-xs font-black">Spotify</div>
+                    <div class="text-[11px] opacity-80">Daily Mix • Избранное • Кэш: 180 МБ</div>
+                  </div>
+                </div>
+                <span class="text-xs font-black">➔</span>
+              </button>
+
+              <!-- VK Музыка -->
+              <button onclick="selectService('vk')" class="w-full p-3 rounded-xl retro-border-sm bg-sky-400 text-stone-900 flex items-center justify-between retro-shadow-sm retro-btn text-left">
+                <div class="flex items-center gap-2.5">
+                  <span class="text-xl">🔵</span>
+                  <div>
+                    <div class="text-xs font-black">VK Музыка</div>
+                    <div class="text-[11px] opacity-80">Мои аудио • Рекомендации • Кэш: 95 МБ</div>
+                  </div>
+                </div>
+                <span class="text-xs font-black">➔</span>
+              </button>
+
+              <!-- Домашний сервер -->
+              <button onclick="selectService('server')" class="w-full p-3 rounded-xl retro-border-sm bg-purple-400 text-stone-900 flex items-center justify-between retro-shadow-sm retro-btn text-left">
+                <div class="flex items-center gap-2.5">
+                  <span class="text-xl">🏠</span>
+                  <div>
+                    <div class="text-xs font-black">Домашний сервер (FLAC)</div>
+                    <div class="text-[11px] opacity-80">Subsonic API • Офлайн FLAC: 1.2 ГБ</div>
+                  </div>
+                </div>
+                <span class="text-xs font-black">➔</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-black/10">
+            <button onclick="clearCurrentServiceCache()" class="w-full py-2 rounded-lg retro-border-sm bg-rose-200 text-rose-900 text-xs font-black retro-btn">
+              🗑️ Очистить кэш текущего сервиса
+            </button>
+          </div>
+        </div>
+
+        <!-- ВЫДВИЖНОЕ МЕНЮ 2: РАЗДЕЛЫ ТЕКУЩЕГО СЕРВИСА (НАПРИМЕР: МОЯ ВОЛНА, ИЗБРАННОЕ И Т.Д.) -->
+        <div id="drawer-sections" class="absolute inset-0 bg-[var(--theme-face)] p-5 z-20 hidden flex-col justify-between transition-all">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between border-b-2 border-black pb-2">
+              <span id="sectionsHeaderTitle" class="text-xs font-black uppercase tracking-wider">Разделы: Яндекс</span>
+              <button onclick="toggleServiceHub()" class="text-xs font-black px-2 py-1 bg-black/10 rounded retro-btn">✕ НАЗАД</button>
+            </div>
+
+            <!-- Сюда JS динамически подставляет родные разделы сервиса -->
+            <div id="serviceSectionsList" class="space-y-2 pt-1">
+              <!-- Родные вкладки сервиса -->
+            </div>
+          </div>
+
+          <div class="text-center text-xs opacity-70">
+            Нажмите на раздел для перехода к трекам
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- КОМПАКТНЫЙ ДЕСКТОП-ВИДЖЕТ С БЫСТРЫМ ПЕРЕКЛЮЧАТЕЛЕМ СЕРВИСОВ -->
+    <div id="view-mini" class="hidden w-[490px] p-3 rounded-[28px] bg-[var(--theme-chassis)] retro-border retro-shadow-lg transition-all duration-300">
+      <div class="w-full bg-[var(--theme-face)] rounded-[20px] p-4 flex flex-col gap-3 retro-border">
+        
+        <!-- Верх: Выбор сервиса прямо в виджете -->
+        <div class="flex items-center justify-between border-b border-black/10 pb-2">
+          <div class="flex items-center gap-1.5 text-xs font-black">
+            <button onclick="selectService('yandex')" class="px-2 py-0.5 rounded bg-amber-400 retro-border-sm retro-btn">🟡 Яндекс</button>
+            <button onclick="selectService('spotify')" class="px-2 py-0.5 rounded bg-emerald-400 retro-border-sm retro-btn">🟢 Spotify</button>
+            <button onclick="selectService('server')" class="px-2 py-0.5 rounded bg-purple-400 retro-border-sm retro-btn">🏠 Сервер</button>
+          </div>
+          <span id="miniServiceSection" class="text-xs font-bold opacity-75">🌊 Моя волна</span>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-13 h-13 rounded-xl retro-border flex items-center justify-center text-2xl shrink-0" style="background-color: var(--theme-art);">
+              <span id="miniCoverEmoji">🎸</span>
+            </div>
+            <div class="min-w-0">
+              <h3 id="miniTitle" class="text-xs font-black truncate">Группа крови</h3>
+              <p id="miniArtist" class="text-xs truncate font-medium" style="color: var(--theme-muted);">КИНО</p>
+            </div>
+          </div>
+
+          <button onclick="toggleServiceTrackCache()" id="miniCacheBtn" class="px-2 py-1 rounded-lg retro-border-sm bg-emerald-400 text-stone-900 text-xs font-black retro-shadow-sm retro-btn">
+            💾 Кэш
+          </button>
+        </div>
+
+        <!-- Перемотка -->
+        <div class="space-y-1">
+          <input type="range" id="seekMini" min="0" max="100" value="40" oninput="syncSeek(this.value)" class="w-full">
+          <div class="flex justify-between text-xs font-bold">
+            <span id="timeCurrentM">1:42</span>
+            <span id="timeDurationM">4:45</span>
+          </div>
+        </div>
+
+        <!-- Контролы виджета -->
+        <div class="flex items-center justify-between pt-1">
+          <button class="w-8 h-8 rounded-lg retro-border-sm bg-rose-400 text-stone-900 flex items-center justify-center retro-shadow-sm retro-btn">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+
+          <div class="flex items-center gap-3">
+            <button onclick="prevTrack()" class="retro-btn text-stone-900">
+              <svg class="w-5 h-5 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="m19 20-10-8 10-8v16ZM5 19V5"/></svg>
+            </button>
+            <button onclick="togglePlay()" id="playBtnMini" class="w-10 h-10 rounded-full bg-[var(--theme-accent)] retro-border retro-shadow-sm text-stone-900 flex items-center justify-center retro-btn">
+              <svg id="playIconM" class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <button onclick="nextTrack()" class="retro-btn text-stone-900">
+              <svg class="w-5 h-5 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="m5 4 10 8-10 8V4ZM19 5v14"/></svg>
+            </button>
+          </div>
+
+          <span class="text-xs font-bold px-2 py-1 rounded bg-black/5" id="miniCacheSize">420 МБ</span>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Конфигурация сервисов и их родных разделов
+    const serviceConfigs = {
+      yandex: {
+        name: "Яндекс Музыка",
+        badge: "🟡 Яндекс",
+        badgeClass: "bg-amber-400 text-stone-900",
+        cacheSize: "420 МБ",
+        sections: [
+          { id: "wave", name: "🌊 Моя волна", desc: "Бесконечный умный поток", emoji: "🌊" },
+          { id: "fav", name: "❤️ Мне нравится", desc: "Все любимые треки (142)", emoji: "❤️" },
+          { id: "playlists", name: "📑 Мои плейлисты", desc: "Закладки и сборники", emoji: "📑" },
+          { id: "downloads", name: "💾 Загруженное (Офлайн)", desc: "Кэш Яндекс Музыки (420 МБ)", emoji: "💾" }
+        ],
+        tracks: [
+          { title: "Группа крови", artist: "КИНО", section: "🌊 Моя Волна", format: "MP3 320k", cached: true, duration: "4:45", emoji: "🎸" },
+          { title: "After Dark", artist: "Mr.Kitty", section: "🌊 Моя Волна", format: "MP3 320k", cached: false, duration: "4:18", emoji: "🌙" },
+          { title: "Лесник", artist: "Король и Шут", section: "❤️ Мне нравится", format: "MP3 320k", cached: true, duration: "3:12", emoji: "🌲" }
+        ]
+      },
+      spotify: {
+        name: "Spotify",
+        badge: "🟢 Spotify",
+        badgeClass: "bg-emerald-400 text-stone-900",
+        cacheSize: "180 МБ",
+        sections: [
+          { id: "mix", name: "⚡ Daily Mix", desc: "Ежедневные персонализированные миксы", emoji: "⚡" },
+          { id: "fav", name: "💚 Любимые треки", desc: "Песни с лайком (384)", emoji: "💚" },
+          { id: "discover", name: "🧭 Discover Weekly", desc: "Открытия недели", emoji: "🧭" },
+          { id: "downloads", name: "💾 Загруженные (Офлайн)", desc: "Кэш Spotify (180 МБ)", emoji: "💾" }
+        ],
+        tracks: [
+          { title: "Starboy", artist: "The Weeknd, Daft Punk", section: "⚡ Daily Mix", format: "OGG 320k", cached: false, duration: "3:50", emoji: "⚡" },
+          { title: "Get Lucky", artist: "Daft Punk, Pharrell", section: "💚 Любимые треки", format: "OGG 320k", cached: true, duration: "4:08", emoji: "🪩" }
+        ]
+      },
+      vk: {
+        name: "VK Музыка",
+        badge: "🔵 VK Музыка",
+        badgeClass: "bg-sky-400 text-stone-900",
+        cacheSize: "95 МБ",
+        sections: [
+          { id: "my", name: "🎵 Моя музыка", desc: "Все аудиозаписи страницы", emoji: "🎵" },
+          { id: "recs", name: "✨ Рекомендации", desc: "Алгоритмическая лента VK", emoji: "✨" },
+          { id: "friends", name: "👥 Музыка друзей", desc: "Обновления подписок", emoji: "👥" },
+          { id: "downloads", name: "💾 Загруженные (Офлайн)", desc: "Кэш VK (95 МБ)", emoji: "💾" }
+        ],
+        tracks: [
+          { title: "Судно (Борис Рыжий)", artist: "Молчат Дома", section: "🎵 Моя музыка", format: "MP3 320k", cached: true, duration: "2:21", emoji: "🏢" },
+          { title: "Юморист", artist: "FACE", section: "✨ Рекомендации", format: "MP3 320k", cached: false, duration: "2:54", emoji: "🎤" }
+        ]
+      },
+      server: {
+        name: "Домашний сервер (Self-hosted)",
+        badge: "🏠 Сервер",
+        badgeClass: "bg-purple-400 text-stone-900",
+        cacheSize: "1.2 ГБ",
+        sections: [
+          { id: "lossless", name: "💿 FLAC Архив", desc: "Несжатые студийные альбомы", emoji: "💿" },
+          { id: "albums", name: "📁 Папки и Дискографии", desc: "Прямая файловая структура", emoji: "📁" },
+          { id: "playlists", name: "⭐ Избранное FLAC", desc: "Личные плейлисты без интернета", emoji: "⭐" },
+          { id: "downloads", name: "💾 Офлайн хранилище", desc: "Закешированные FLAC альбомы (1.2 ГБ)", emoji: "💾" }
+        ],
+        tracks: [
+          { title: "Midnight City", artist: "M83", section: "💿 FLAC Архив", format: "FLAC 96kHz", cached: true, duration: "3:42", emoji: "📻" },
+          { title: "Resonance", artist: "HOME", section: "💿 FLAC Архив", format: "FLAC 44.1k", cached: true, duration: "3:32", emoji: "🌆" },
+          { title: "Instant Crush", artist: "Daft Punk", section: "⭐ Избранное FLAC", format: "FLAC 96kHz", cached: true, duration: "5:37", emoji: "🤖" }
+        ]
+      }
+    };
+
+    let activeServiceKey = 'yandex';
+    let currentTrackIdx = 0;
+    let isPlaying = true;
+
+    function selectService(serviceKey) {
+      activeServiceKey = serviceKey;
+      currentTrackIdx = 0;
+      closeDrawers();
+      updatePlayerUI();
+      renderServiceSections();
+    }
+
+    function toggleServiceDrawer() {
+      const drawer = document.getElementById('drawer-services');
+      drawer.classList.toggle('hidden');
+      drawer.classList.toggle('flex');
+    }
+
+    function toggleServiceHub() {
+      const drawer = document.getElementById('drawer-sections');
+      drawer.classList.toggle('hidden');
+      drawer.classList.toggle('flex');
+      if (!drawer.classList.contains('hidden')) {
+        renderServiceSections();
+      }
+    }
+
+    function closeDrawers() {
+      document.getElementById('drawer-services').classList.add('hidden');
+      document.getElementById('drawer-services').classList.remove('flex');
+      document.getElementById('drawer-sections').classList.add('hidden');
+      document.getElementById('drawer-sections').classList.remove('flex');
+    }
+
+    function renderServiceSections() {
+      const s = serviceConfigs[activeServiceKey];
+      document.getElementById('sectionsHeaderTitle').innerText = `Разделы: ${s.name}`;
+      const list = document.getElementById('serviceSectionsList');
+      list.innerHTML = '';
+
+      s.sections.forEach(sec => {
+        const btn = document.createElement('button');
+        btn.className = "w-full p-2.5 rounded-xl retro-border-sm bg-black/5 hover:bg-black/10 flex items-center justify-between retro-btn text-left";
+        btn.onclick = () => {
+          // Имитируем переход в раздел
+          document.getElementById('hubSectionBadge').innerText = sec.name;
+          document.getElementById('miniServiceSection').innerText = sec.name;
+          closeDrawers();
+        };
+        btn.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="text-lg">${sec.emoji}</span>
+            <div>
+              <div class="text-xs font-black text-stone-900">${sec.name}</div>
+              <div class="text-[11px] opacity-70">${sec.desc}</div>
+            </div>
+          </div>
+          <span class="text-xs font-black">➔</span>
+        `;
+        list.appendChild(btn);
+      });
+    }
+
+    function updatePlayerUI() {
+      const s = serviceConfigs[activeServiceKey];
+      const t = s.tracks[currentTrackIdx];
+
+      // Сервис-бейдж
+      const badge = document.getElementById('currentServiceBadge');
+      badge.innerText = s.badge;
+      badge.className = `flex items-center gap-1.5 text-xs font-black px-2.5 py-1 rounded-full border-2 border-black/80 ${s.badgeClass}`;
+
+      // Тексты
+      document.getElementById('handheldTitle').innerText = t.title;
+      document.getElementById('handheldArtist').innerText = t.artist;
+      document.getElementById('coverEmoji').innerText = t.emoji;
+      document.getElementById('hubSectionBadge').innerText = t.section;
+      document.getElementById('formatBadge').innerText = t.format;
+      document.getElementById('timeDurationH').innerText = t.duration;
+      document.getElementById('serviceCacheLabel').innerText = `Кэш: ${s.cacheSize}`;
+
+      // Мини-плеер
+      document.getElementById('miniTitle').innerText = t.title;
+      document.getElementById('miniArtist').innerText = t.artist;
+      document.getElementById('miniCoverEmoji').innerText = t.emoji;
+      document.getElementById('miniServiceSection').innerText = t.section;
+      document.getElementById('miniCacheSize').innerText = s.cacheSize;
+      document.getElementById('timeDurationM').innerText = t.duration;
+
+      // Кнопки кэша
+      const cacheBtn = document.getElementById('handheldCacheBtn');
+      const cacheText = document.getElementById('cacheBtnText');
+      if (t.cached) {
+        cacheBtn.className = "px-2.5 py-1 rounded-lg retro-border-sm bg-emerald-400 text-stone-900 flex items-center gap-1 retro-shadow-sm retro-btn text-xs font-black";
+        cacheText.innerText = "В кэше ✓";
+      } else {
+        cacheBtn.className = "px-2.5 py-1 rounded-lg retro-border-sm bg-stone-300 text-stone-700 flex items-center gap-1 retro-shadow-sm retro-btn text-xs font-black";
+        cacheText.innerText = "Скачать ☁";
+      }
+
+      // Play/Pause иконки
+      const playSvg = isPlaying
+        ? `<svg class="w-6 h-6 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 15V9m4 6V9"/></svg>`
+        : `<svg class="w-6 h-6 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`;
+      document.getElementById('playBtnHandheld').innerHTML = playSvg;
+      
+      const playMiniSvg = isPlaying
+        ? `<svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`
+        : `<svg class="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`;
+      document.getElementById('playBtnMini').innerHTML = playMiniSvg;
+    }
+
+    function togglePlay() {
+      isPlaying = !isPlaying;
+      updatePlayerUI();
+    }
+
+    function nextTrack() {
+      const s = serviceConfigs[activeServiceKey];
+      currentTrackIdx = (currentTrackIdx + 1) % s.tracks.length;
+      updatePlayerUI();
+    }
+
+    function prevTrack() {
+      const s = serviceConfigs[activeServiceKey];
+      currentTrackIdx = (currentTrackIdx - 1 + s.tracks.length) % s.tracks.length;
+      updatePlayerUI();
+    }
+
+    function toggleServiceTrackCache() {
+      const s = serviceConfigs[activeServiceKey];
+      s.tracks[currentTrackIdx].cached = !s.tracks[currentTrackIdx].cached;
+      updatePlayerUI();
+    }
+
+    function clearCurrentServiceCache() {
+      const s = serviceConfigs[activeServiceKey];
+      s.tracks.forEach(t => t.cached = false);
+      s.cacheSize = "0 МБ";
+      closeDrawers();
+      updatePlayerUI();
+      alert(`Кэш сервиса ${s.name} очищен! Кэш других сервисов остался нетронутым.`);
+    }
+
+    function syncSeek(val) {
+      document.getElementById('seekHandheld').value = val;
+      document.getElementById('seekMini').value = val;
+    }
+
+    function setTheme(name) {
+      document.getElementById('bodyRoot').setAttribute('data-theme', name);
+    }
+
+    function setFormFactor(mode) {
+      if (mode === 'handheld') {
+        document.getElementById('view-handheld').classList.remove('hidden');
+        document.getElementById('view-mini').classList.add('hidden');
+        document.getElementById('btn-handheld').className = "px-3 py-1 rounded-lg bg-stone-900 text-white retro-btn";
+        document.getElementById('btn-mini').className = "px-3 py-1 rounded-lg hover:bg-stone-200 text-stone-900 retro-btn";
+      } else {
+        document.getElementById('view-handheld').classList.add('hidden');
+        document.getElementById('view-mini').classList.remove('hidden');
+        document.getElementById('btn-mini').className = "px-3 py-1 rounded-lg bg-stone-900 text-white retro-btn";
+        document.getElementById('btn-handheld').className = "px-3 py-1 rounded-lg hover:bg-stone-200 text-stone-900 retro-btn";
+      }
+    }
+
+    // Старт
+    updatePlayerUI();
+    renderServiceSections();
+  </script>
+</body>
+</html>
